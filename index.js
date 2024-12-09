@@ -1,10 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import { Pool } from './conexao/conexao.js';
 import { retornaListaMedicos,apagaUsuario } from './service/service.js';
-
-
 
 const app = express();
 
@@ -12,11 +9,13 @@ app.use(cors());
 app.use(express.json());
 
 
-
 app.get('/medicos',async (req,res)=>{
 
     res.json(await retornaListaMedicos())
 })
+
+
+
 app.delete('/medicos/:id',async(req,res)=>{
 
     let id = req.params.id;
@@ -30,7 +29,7 @@ app.delete('/medicos/:id',async(req,res)=>{
 
     const apagausuarioBD = await apagaUsuario(parseInt(id));
 
-    if(apagausuarioBD.length > 0){
+    if(apagausuarioBD > 0){
         res.status(200).json({mensagem :` Usuario do ID ${id} excluido com sucesso`})
         return
     }

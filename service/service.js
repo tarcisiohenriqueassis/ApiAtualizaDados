@@ -1,8 +1,8 @@
 import { Pool } from "../conexao/conexao.js";
 
-async function executaQuery(conexao,query){
+async function executaQuery(conexao,query,id){
     
-    const resultado_bd = await conexao.query(query);
+    const resultado_bd = await conexao.query(query,id);
     const resultadoFormatado = await resultado_bd[0];
 
     return resultadoFormatado;
@@ -23,13 +23,11 @@ export async function retornaListaMedicos(){
 export async function apagaUsuario(id){
 
     const conexao = await Pool.getConnection();
-    const query =('DELETE FROM medicos WHERE id ='+id);
+    const query =('DELETE FROM medicos WHERE id = ?');
 
-    let resultado;
-
-    const resultadoBD = await executaQuery(conexao,query);
+    const resultadoBD = await executaQuery(conexao,query,id);
 
     conexao.release();
 
-    return resultadoBD;
+    return resultadoBD.affectedRows;
 }
