@@ -20,6 +20,16 @@ export async function retornaListaMedicos(){
     return resultadoBD;
 }
 
+export async function retornaMedicoPorID(id) {
+    
+    const conexao = await Pool.getConnection();
+    const query =('SELECT id,nome,telefone,email,descricao,especialidade FROM medicos WHERE id = ?');
+
+    const resultadoBD = executaQuery(conexao,query,id);
+
+    return  resultadoBD;
+}
+
 export async function apagaUsuario(id){
 
     const conexao = await Pool.getConnection();

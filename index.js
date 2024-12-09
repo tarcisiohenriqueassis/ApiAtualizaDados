@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import { retornaListaMedicos,apagaUsuario } from './service/service.js';
+import { retornaListaMedicos,retornaMedicoPorID,apagaUsuario } from './service/service.js';
 
 const app = express();
 
@@ -14,6 +14,27 @@ app.get('/medicos',async (req,res)=>{
     res.json(await retornaListaMedicos())
 })
 
+app.get('/medicos/:id', async (req,res)=>{
+
+    let id = req.params.id;
+
+    const regExp =/^\d+$/;
+
+    if(!regExp.test(id)){
+        res.status(406).json({ mensagem : `Digite apenas numeros`});
+        return
+    }
+
+    const resultadoID = await retornaMedicoPorID(parseInt(id));
+
+    if(resultadoID.length > 0){
+        res.json(resultadoID);
+    }
+    else{
+        res.status(404).json({mensagem : `Usuario não encontrado`})
+    }
+    
+})
 
 
 app.delete('/medicos/:id',async(req,res)=>{
